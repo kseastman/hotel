@@ -13,6 +13,7 @@ describe "BookingManager" do
 
     result.must_be_kind_of Array
     result.length.must_equal 20
+    result.last.room_number.must_equal 20
 
   end
 

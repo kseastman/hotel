@@ -10,7 +10,10 @@ describe "Room" do
     numbers = (1..20).to_a
     numbers.each do |num|
       result = Hotel::Room.new(num)
-      result.number.must_equal num
+
+
+      result.room_number.must_equal num
+
     end
   end
 
