@@ -3,7 +3,8 @@ require 'minitest'
 require 'minitest/autorun'
 require 'minitest/reporters'
 require 'minitest/skip_dsl'
-# Add simplecov
+require 'simplecov'
+SimpleCov.start
 
 Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
 
@@ -11,6 +12,4 @@ Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
 require_relative '../lib/booking'
 require_relative '../lib/booking_manager'
 require_relative '../lib/room'
-require_relative '../lib/block'
-require_relative '../lib/staff'
-require_relative '../lib/customer'
+require_relative '../lib/user'
