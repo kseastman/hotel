@@ -9,8 +9,6 @@ module Hotel
     # between a customer, a staff person and
     # an administrator, possibly store username
     # and password
-    @user = admin
+    @user = "admin"
   end
 end
-
-binding.pry

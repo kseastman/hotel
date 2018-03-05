@@ -5,6 +5,7 @@ require 'simplecov'
 
 module Hotel
   class Room
+    attr_reader :number, :cost_per_night
     def initialize(number)
       # rooms that know their room number and cost
       # make more sense as objects than a hash, for future
