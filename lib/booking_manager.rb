@@ -10,10 +10,11 @@ module Hotel
     # should handle the business logic for bookings
     # e.g. all methods related to tracking room availability
     # and blocks and costs
-    attr_reader :rooms, :reservations
+    attr_reader :rooms, :reservations, :occupied_rooms
     def initialize
       @rooms = load_rooms # method which populates all rooms on creation of the manager
       @reservations = [] # user story, list all reservations
+      @occupied_rooms = []
     end
 
     def load_rooms
@@ -32,7 +33,11 @@ module Hotel
       date_range = (Date.parse(start_date)..Date.parse(end_date))
 
       open_room = rooms.find { |room| room.status == :AVAILABLE }
-      @reservations << Booking.new(open_room, date_range)
+      if open_room == nil
+        raise StandardError.new("There are no available rooms")
+      else
+        @reservations << Booking.new(open_room, date_range)
+      end
     end
 
     def get_bookings_by_date(date)
@@ -41,11 +46,12 @@ module Hotel
         date = parsed_date
       end
       bookings = @reservations.find_all { |booking| booking.period.include? date}
-
+      @occupied_rooms << Hash[bookings.map { |booking| [booking.room.room_number, booking.room]}]
       return bookings
     end
 
     def get_booking_by_id(id)
+      return @reservations.find { |booking| booking.id == id}
     end
 
     #   unless Date.valid_commercial?(start_date.year, start_date.mon, start_date.mday) && Date.valid_commercial?(end_date.year, end_date.mon, end_date.mday)
@@ -60,6 +66,5 @@ module Hotel
       raise StandardError.new("Invalid reservation date entry: #{date} has already passed.") if compare == -1
       return parsed_date
     end
-
   end
 end

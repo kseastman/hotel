@@ -45,6 +45,26 @@ describe "BookingManager" do
 
   end
 
+  it "can find a reservation by id" do
+    id = 1
+    result = @result.get_booking_by_id(id)
+
+    result.must_be_instance_of Hotel::Booking
+    result.id.must_equal id
+
+  end
+
+  it "can handle string dates" do #edge_case
+    date = "#{Date.today + 2}"
+    expected_result = Date.today + 2
+    result = @result.get_bookings_by_date(date)
+
+    result.must_be_kind_of Array
+    result[0].must_be_instance_of Hotel::Booking
+    result[0].period.must_include expected_result
+
+  end
+
   it "raises an error if an invalid date is used" do
     #this test doesn't seem to pass for the right reasons, investigate further
     today = Date.today
@@ -57,6 +77,13 @@ describe "BookingManager" do
     today = Date.today
     start_date = today << 1
     proc{ @result.reserve_room(start_date, today)}.must_raise StandardError
+  end
+
+  it "can handle :AVAILABLE/:UNAVAILABLE reservation logic" do
+    proc{ 20.times do
+      @result.set_booking(date1.to_s, date2.to_s)
+    end}.must_raise StandardError
+
   end
 
   it "has business logic" do
