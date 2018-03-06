@@ -7,8 +7,10 @@ module Hotel
 
 
   class Booking
-    attr_reader :cost_estimate, :room, :period
+    @@id_count = 0
+    attr_reader :cost_estimate, :room, :period, :id
     def initialize(open_room, date_range)
+      @id = @@id_count += 1
       @room = open_room
       @period = reserve_room(date_range)
       @cost_estimate = get_cost_estimate(period) # this may belong in BookingManager, we'll see

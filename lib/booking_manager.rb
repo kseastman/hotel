@@ -26,7 +26,7 @@ module Hotel
     end
 
 
-    def get_booking(start_date, end_date)
+    def set_booking(start_date, end_date)
       check_date(start_date)
       check_date(end_date)
 
