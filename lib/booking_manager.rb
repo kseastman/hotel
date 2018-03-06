@@ -25,7 +25,6 @@ module Hotel
       return rooms
     end
 
-
     def set_booking(start_date, end_date)
       check_date(start_date)
       check_date(end_date)
@@ -34,6 +33,16 @@ module Hotel
 
       open_room = rooms.find { |room| room.status == :AVAILABLE }
       @reservations << Booking.new(open_room, date_range)
+    end
+
+    def get_bookings_by_date(date)
+      parsed_date = check_date(date)
+      bookings = @reservations.find_all { |booking| booking.period.include? parsed_date}
+
+      return bookings
+    end
+
+    def get_booking_by_id(id)
     end
 
     #   unless Date.valid_commercial?(start_date.year, start_date.mon, start_date.mday) && Date.valid_commercial?(end_date.year, end_date.mon, end_date.mday)
