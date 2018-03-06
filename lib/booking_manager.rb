@@ -46,25 +46,47 @@ module Hotel
         date = parsed_date
       end
       bookings = @reservations.find_all { |booking| booking.period.include? date}
-      @occupied_rooms << Hash[bookings.map { |booking| [booking.room.room_number, booking.room]}]
+      occupied_rooms = Hash[bookings.map { |booking| [booking.room.room_number, booking.room]}]
+      @occupied_rooms << occupied_rooms
       return bookings
     end
 
-    def get_booking_by_id(id)
-      return @reservations.find { |booking| booking.id == id}
+    def get_booking_by_id(id_to_find)
+      find_booking = @reservations.find { |booking| booking.id == id_to_find}
+      return find_booking
+    end
+
+    def get_availability_by_date(date)
+      check_date(date)
+      find_bookings = @reservations.find_all { |booking| booking.period.include? date}
+      return find_bookings
+    end
+
+    def set_availability
+      today = Date.today
+      get_bookings_by_date(today)
+      occupied_rooms[0].each_value do |room|
+        room.change_status
+      end
+    end
+
+    def check_out(room_number)
+      find_room = @rooms.find { |room| room.room_number == room_number}
+      find_room.change_status(:AVAILABLE)
     end
 
     #   unless Date.valid_commercial?(start_date.year, start_date.mon, start_date.mday) && Date.valid_commercial?(end_date.year, end_date.mon, end_date.mday)
 
-
-
     private
     def check_date(date)
-      parsed_date = Date.parse(date.to_s)
-      raise StandardError.new("Invalid reservation date entry: #{date}") if parsed_date.class != Date
-      compare = parsed_date <=> Date.today.prev_day
+      unless date.class == Date
+        parsed_date = Date.parse(date.to_s)
+        date = parsed_date
+      end
+      raise StandardError.new("Invalid reservation date entry: #{date}") if date.class != Date
+      compare = date <=> Date.today.prev_day
       raise StandardError.new("Invalid reservation date entry: #{date} has already passed.") if compare == -1
-      return parsed_date
+      return date
     end
   end
 end

@@ -8,7 +8,7 @@ module Hotel
 
   class Booking
     @@id_count = 0
-    attr_reader :cost_estimate, :room, :period, :id
+    attr_reader :cost_estimate, :room, :period, :id, :id_count
     def initialize(open_room, date_range)
       @id = @@id_count += 1
       @room = open_room
@@ -17,13 +17,11 @@ module Hotel
     end
 
     def reserve_room(date_range)
-      room.status = :RESERVED
       dates = []
       date1 = date_range.first
       date_range.each_with_object(date1) {|date| dates << date }
       return dates
     end
-
 
     def get_cost_estimate(period)
       # calculates the estimated total for a reservation
@@ -33,6 +31,5 @@ module Hotel
       subtotal = room.cost_per_night * length
       return subtotal
     end
-
   end
 end

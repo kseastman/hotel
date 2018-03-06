@@ -17,5 +17,17 @@ module Hotel
       @status = :AVAILABLE
       @dates = nil
     end
+
+    def change_status(new_status: :RESERVED)
+      case new_status
+      when :RESERVED
+        @status = :RESERVED
+      when :AVAILABLE
+        @status = :AVAILABLE
+      else
+        raise ArgumentError.new("Cannot set status to: #{new_status}")
+      end
+    end
+
   end
 end
