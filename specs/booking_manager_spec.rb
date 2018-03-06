@@ -2,25 +2,46 @@ require_relative 'spec_helper'
 
 describe "BookingManager" do
   before do
+    date1 = Date.today
+    date2 = date1 + 3
+
     @result = Hotel::BookingManager.new
+    @booking1 = @result.set_booking(date1.to_s, date2.to_s)
+    @booking2 = @result.set_booking((date1 + 1).to_s, date2.to_s)
   end
-  it "can be created" do
-    @result.must_be_instance_of Hotel::BookingManager
+  describe "Initialize" do
+    it "can be created" do
+      @result.must_be_instance_of Hotel::BookingManager
+    end
+
+    it "creates a list of rooms" do
+      result = @result.rooms
+
+      result.must_be_kind_of Array
+      result.length.must_equal 20
+      result.last.room_number.must_equal 20
+
+    end
   end
 
-  it "has a list of rooms" do
-    result = @result.rooms
 
-    result.must_be_kind_of Array
-    result.length.must_equal 20
-    result.last.room_number.must_equal 20
 
-  end
 
   it "has a list of reservations" do
 
     result = @result.reservations
     result.must_be_kind_of Array
+    result.length.must_equal 2
+
+  end
+
+  it "can find a list of reservations by date" do
+    date = Date.today + 2
+    result = @result.get_bookings_by_date(date)
+
+    result.must_be_kind_of Array
+    result[0].must_be_instance_of Hotel::Booking
+    result[0].period.must_include date
 
   end
 

@@ -36,8 +36,11 @@ module Hotel
     end
 
     def get_bookings_by_date(date)
-      parsed_date = check_date(date)
-      bookings = @reservations.find_all { |booking| booking.period.include? parsed_date}
+      unless date.class == Date
+        parsed_date = check_date(date)
+        date = parsed_date
+      end
+      bookings = @reservations.find_all { |booking| booking.period.include? date}
 
       return bookings
     end
@@ -60,4 +63,3 @@ module Hotel
 
   end
 end
-binding.pry
