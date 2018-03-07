@@ -15,15 +15,14 @@ module Hotel
       @room_number = number
       @cost_per_night = 200
       @status = :AVAILABLE
-      @dates = nil
+      @block_dates = nil
+
     end
 
     def change_status(new_status: :RESERVED)
       case new_status
-      when :RESERVED
-        @status = :RESERVED
-      when :AVAILABLE
-        @status = :AVAILABLE
+      when :RESERVED, :AVAILABLE, :BLOCK, :BLOCK_RESERVED
+        @status = new_status
       else
         raise ArgumentError.new("Cannot set status to: #{new_status}")
       end
