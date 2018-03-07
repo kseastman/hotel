@@ -1,5 +1,7 @@
 require 'simplecov'
-SimpleCov.start
+SimpleCov.start do
+  add_filter "/specs/"
+end
 
 require 'time'
 require 'minitest'
@@ -14,3 +16,4 @@ require_relative '../lib/booking'
 require_relative '../lib/booking_manager'
 require_relative '../lib/room'
 require_relative '../lib/user'
+require_relative '../lib/block'

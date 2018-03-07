@@ -1,10 +1,10 @@
 require_relative 'spec_helper'
 
-describe "User" do
-it "creates a user" do
+describe "Block" do
+it "creates a block" do
   # test that it creates a user
-  result = Hotel::User.new
-  result.must_be_instance_of Hotel::User
+  result = Hotel::Block.new
+  result.must_be_instance_of Hotel::Block
 end
 
 it "can do things" do
