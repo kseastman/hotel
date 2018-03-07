@@ -27,10 +27,10 @@ module Hotel
     end
 
     def set_booking(start_date, end_date)
-      check_date(start_date)
-      check_date(end_date)
 
-      date_range = (Date.parse(start_date)...Date.parse(end_date))
+
+
+      date_range = (check_date(start_date)...check_date(end_date))
 
       open_room = rooms.find { |room| room.status == :AVAILABLE }
       if open_room == nil
@@ -77,6 +77,10 @@ module Hotel
       @occupied_rooms.each do |booking|
         booking.room.change_status
       end
+    end
+
+    def reserve_block
+
     end
 
     def check_out(room_number)
