@@ -46,8 +46,6 @@ module Hotel
         date = parsed_date
       end
       bookings = @reservations.find_all { |booking| booking.period.include? date}
-      occupied_rooms = Hash[bookings.map { |booking| [booking.room.room_number, booking.room]}]
-      @occupied_rooms << occupied_rooms
       return bookings
     end
 
@@ -64,9 +62,9 @@ module Hotel
 
     def set_availability
       today = Date.today
-      get_bookings_by_date(today)
-      occupied_rooms[0].each_value do |room|
-        room.change_status
+      @occupied_rooms = get_bookings_by_date(today)
+      @occupied_rooms.each do |booking|
+        booking.room.change_status
       end
     end
 

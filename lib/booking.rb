@@ -18,8 +18,7 @@ module Hotel
 
     def reserve_room(date_range)
       dates = []
-      date1 = date_range.first
-      date_range.each_with_object(date1) {|date| dates << date }
+      date_range.each {|date| dates << date }
       return dates
     end
 

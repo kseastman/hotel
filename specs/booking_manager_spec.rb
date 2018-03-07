@@ -60,7 +60,7 @@ describe "BookingManager" do
 
       it "can set the availability of rooms each day" do
         @result.set_availability
-        result = @result.occupied_rooms.first.first.last
+        result = @result.occupied_rooms[0].room
 
         result.status.must_equal :RESERVED
       end
