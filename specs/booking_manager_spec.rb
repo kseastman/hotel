@@ -5,6 +5,7 @@ describe "BookingManager" do
     date1 = Date.today
     date2 = date1 + 3
 
+    @date = date2
     @result = Hotel::BookingManager.new
     @booking1 = @result.set_booking(date1.to_s, date2.to_s)
     @booking2 = @result.set_booking((date1 + 1).to_s, date2.to_s)
@@ -63,6 +64,17 @@ describe "BookingManager" do
         result = @result.occupied_rooms[0].room
 
         result.status.must_equal :RESERVED
+      end
+
+      it "can get a list of available rooms by date" do
+        result = @result.get_availability_by_date(@date)
+        result.must_be_kind_of Array
+        #---
+
+        result = @result.get_availability_by_date(@date).first
+
+        result.must_be_instance_of Hotel::Room
+        result.status.must_equal :AVAILABLE
       end
     end
 

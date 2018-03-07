@@ -28,8 +28,8 @@ describe "Booking" do
     # does not include last night in reservation
     it "creates a cost estimate" do
       result = @booking.cost_estimate
-      days = @booking.period.length
-      nights = days - 1
+      days = @booking.period.length + 1
+      nights = @booking.period.length
 
       result.must_equal nights * 200
       result.wont_equal days * 200

@@ -26,7 +26,7 @@ module Hotel
       # calculates the estimated total for a reservation
       # does not include the last day of reservation in
       # the calculation
-      length = period.length - 1
+      length = period.length
       subtotal = room.cost_per_night * length
       return subtotal
     end
