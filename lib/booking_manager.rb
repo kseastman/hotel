@@ -28,8 +28,6 @@ module Hotel
 
     def set_booking(start_date, end_date)
 
-
-
       date_range = (check_date(start_date)...check_date(end_date))
 
       open_room = rooms.find { |room| room.status == :AVAILABLE }
@@ -80,15 +78,22 @@ module Hotel
     end
 
     def reserve_block
+      # find {n} rooms that are near eachother and available for those dates
+      # requirements:
+      #=> date range, no more than 5 rooms at a discounted rate
+      #=> only include rooms available for the given date range
+      #=> a room in a block is not available or included in another block
 
+      #needs:
+      #=> date_range
+      #=> availablity_checking
+      #=> uniqueness
     end
 
     def check_out(room_number)
       find_room = @rooms.find { |room| room.room_number == room_number}
       find_room.change_status(:AVAILABLE)
     end
-
-    #   unless Date.valid_commercial?(start_date.year, start_date.mon, start_date.mday) && Date.valid_commercial?(end_date.year, end_date.mon, end_date.mday)
 
     private
     def check_date(date)
