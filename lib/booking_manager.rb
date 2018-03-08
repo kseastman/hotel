@@ -17,6 +17,7 @@ module Hotel
       @rooms = load_rooms # method which populates all rooms on creation of the manager
       @reservations = [] # user story, list all reservations
       @occupied_rooms = []
+      @block_reservations = []
     end
 
     def load_rooms
@@ -31,7 +32,6 @@ module Hotel
     def set_booking(start_date, end_date)
       dates = Stay.new(start_date, end_date)
       date_range = dates.period
-
 
       #(does this logic belong to room?)
       open_room = rooms.find { |room| room.status == :AVAILABLE }
@@ -71,26 +71,20 @@ module Hotel
       return available_rooms
     end
 
-    def set_availability
-      #unneccesary function
-      today = Date.today
-      @occupied_rooms = get_bookings_by_date(today)
-      @occupied_rooms.each do |booking|
-        booking.room.change_status
-      end
-    end
+    # def set_availability
+    #   #unneccesary function
+    #   today = Date.today
+    #   @occupied_rooms = get_bookings_by_date(today)
+    #   @occupied_rooms.each do |booking|
+    #     booking.room.change_status
+    #   end
+    # end
 
-    def reserve_block
-      # find {n} rooms that are near eachother and available for those dates
-      # requirements:
-      #=> date range, no more than 5 rooms at a discounted rate
-      #=> only include rooms available for the given date range
-      #=> a room in a block is not available or included in another block
+    def reserve_block(start_date, end_date)
+      block_dates = Stay.new(start_date, end_date)
+      block = Block.new(block_dates)
 
-      #needs:
-      #=> date_range
-      #=> availablity_checking
-      #=> uniqueness
+      @block_reservations << block
     end
 
     def check_out(room_number)

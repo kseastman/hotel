@@ -1,9 +1,13 @@
 require_relative 'spec_helper'
 
 describe "Block" do
+before do
+ dates = Hotel::Stay.new("apr4, 2018", "apr7, 2018")
+ @block1 = Hotel::Block.new(dates)
+end
 it "creates a block" do
   # test that it creates a user
-  result = Hotel::Block.new
+  result = @block1
   result.must_be_instance_of Hotel::Block
 end
 
