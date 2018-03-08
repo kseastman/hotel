@@ -17,8 +17,11 @@ module Hotel
     end
 
     def reserve_room(date_range)
+
+      #need to clean this up, took the logic and put it elsewhere, this may be a repeat
       dates = []
       date_range.each {|date| dates << date }
+      #add in call to check availability of the room.
       return dates
     end
 

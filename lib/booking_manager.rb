@@ -4,6 +4,8 @@ require 'time'
 
 require_relative 'booking'
 require_relative 'room'
+require_relative 'block'
+require_relative 'stay'
 
 module Hotel
   class BookingManager
@@ -27,9 +29,11 @@ module Hotel
     end
 
     def set_booking(start_date, end_date)
+      dates = Stay.new(start_date, end_date)
+      date_range = dates.period
 
-      date_range = (check_date(start_date)...check_date(end_date))
 
+      #(does this logic belong to room?)
       open_room = rooms.find { |room| room.status == :AVAILABLE }
       if open_room == nil
         raise StandardError.new("There are no available rooms")
@@ -45,11 +49,9 @@ module Hotel
     end
 
     def get_bookings_by_date(date)
-      unless date.class == Date
-        parsed_date = check_date(date)
-        date = parsed_date
+      bookings = @reservations.find_all do |booking|
+        booking.period.include? date
       end
-      bookings = @reservations.find_all { |booking| booking.period.include? date}
       return bookings
     end
 
@@ -70,6 +72,7 @@ module Hotel
     end
 
     def set_availability
+      #unneccesary function
       today = Date.today
       @occupied_rooms = get_bookings_by_date(today)
       @occupied_rooms.each do |booking|
@@ -95,16 +98,6 @@ module Hotel
       find_room.change_status(:AVAILABLE)
     end
 
-    private
-    def check_date(date)
-      unless date.class == Date
-        parsed_date = Date.parse(date)
-        date = parsed_date
-      end
-      raise StandardError.new("Invalid reservation date entry: #{date}") if date.class != Date
-      compare = date <=> Date.today.prev_day
-      raise StandardError.new("Invalid reservation date entry: #{date} has already passed.") if compare == -1
-      return date
-    end
+
   end
 end

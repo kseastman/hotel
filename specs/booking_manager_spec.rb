@@ -59,12 +59,15 @@ describe "BookingManager" do
         end}.must_raise StandardError
       end
 
-      it "can set the availability of rooms each day" do
-        @result.set_availability
-        result = @result.occupied_rooms[0].room
+      #Will likely be removed from final code
 
-        result.status.must_equal :RESERVED
-      end
+      #---
+      # it "can set the availability of rooms each day" do
+      #   @result.set_availability
+      #   result = @result.occupied_rooms[0].room
+      #
+      #   result.status.must_equal :RESERVED
+      # end
 
       it "can get a list of available rooms by date" do
         result = @result.get_availability_by_date(@date)
@@ -80,16 +83,16 @@ describe "BookingManager" do
 
     describe "Date Handling" do
 
-      it "can handle string dates" do #edge_case
-        date = "#{Date.today + 2}"
-        expected_result = Date.today + 2
-        result = @result.get_bookings_by_date(date)
-
-        result.must_be_kind_of Array
-        result[0].must_be_instance_of Hotel::Booking
-        result[0].period.must_include expected_result
-
-      end
+      # it "can handle string dates" do #edge_case, too closely coupled
+      #   date = "#{Date.today + 2}"
+      #   expected_result = Date.today + 2
+      #   result = @result.get_bookings_by_date(date)
+      #
+      #   result.must_be_kind_of Array
+      #   result[0].must_be_instance_of Hotel::Booking
+      #   result[0].period.must_include expected_result
+      #
+      # end
 
       it "raises an error if an invalid date is used" do
         #this test doesn't seem to pass for the right reasons, investigate further
