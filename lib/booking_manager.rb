@@ -5,17 +5,15 @@ require 'time'
 require_relative 'booking'
 require_relative 'room'
 require_relative 'block'
-require_relative 'stay'
+require_relative 'duration'
 
 module Hotel
   class BookingManager
     # should handle the business logic for bookings
-    # e.g. all methods related to tracking room availability
-    # and blocks and costs
     attr_reader :rooms, :reservations, :occupied_rooms
     def initialize
-      @rooms = load_rooms # method which populates all rooms on creation of the manager
-      @reservations = [] # user story, list all reservations
+      @rooms = load_rooms
+      @reservations = []
       @occupied_rooms = []
       @block_reservations = []
     end
@@ -30,21 +28,12 @@ module Hotel
     end
 
     def set_booking(start_date, end_date)
-      dates = Stay.new(start_date, end_date)
+      dates = Duration.new(start_date, end_date)
       date_range = dates.period
 
       #(does this logic belong to room?)
       open_room = rooms.find { |room| room.status == :AVAILABLE }
-      if open_room == nil
-        raise StandardError.new("There are no available rooms")
-      else
-        @reservations << Booking.new(open_room, date_range)
-      end
-
-      # Here for testing purposes, will find a better place or delete if unnecessary
-      # date_range.each do |date|
-      #   get_availability_by_date(date)
-      # end
+      @reservations << Booking.new(open_room, date_range)
 
     end
 
@@ -72,7 +61,7 @@ module Hotel
     end
 
     # def set_availability
-    #   #unneccesary function
+    #   #unneccesary function, may reuse some logic elsewhere
     #   today = Date.today
     #   @occupied_rooms = get_bookings_by_date(today)
     #   @occupied_rooms.each do |booking|
@@ -81,7 +70,7 @@ module Hotel
     # end
 
     def reserve_block(start_date, end_date)
-      block_dates = Stay.new(start_date, end_date)
+      block_dates = Duration.new(start_date, end_date)
       block = Block.new(block_dates)
 
       @block_reservations << block

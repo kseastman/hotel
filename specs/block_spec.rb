@@ -2,7 +2,7 @@ require_relative 'spec_helper'
 
 describe "Block" do
 before do
- dates = Hotel::Stay.new("apr4, 2018", "apr7, 2018")
+ dates = Hotel::Duration.new("apr4, 2018", "apr7, 2018")
  @block1 = Hotel::Block.new(dates)
 end
 it "creates a block" do
