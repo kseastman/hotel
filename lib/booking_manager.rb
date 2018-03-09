@@ -31,7 +31,8 @@ module Hotel
       dates = Duration.new(start_date, end_date)
       date_range = dates.period
 
-      #(does this logic belong to room?)
+      # Here for testing purposes, will find a better place or delete if unnecessary
+
       open_room = rooms.find { |room| room.status == :AVAILABLE }
       @reservations << Booking.new(open_room, date_range)
 
@@ -44,6 +45,14 @@ module Hotel
       return bookings
     end
 
+    def available_rooms(date)
+      date_range.each do |day|
+         get_availability_by_date(day)
+      end
+      binding.pry
+      return available
+    end
+
     def get_booking_by_id(id_to_find)
       find_booking = @reservations.find { |booking| booking.id == id_to_find}
       return find_booking
@@ -52,6 +61,7 @@ module Hotel
     def get_availability_by_date(date)
       unavailable_rooms = []
       find_bookings = get_bookings_by_date(date)
+
       find_bookings.each do |booking|
         unavailable_rooms << booking.room
       end
@@ -69,7 +79,9 @@ module Hotel
     #   end
     # end
 
-    def reserve_block(start_date, end_date)
+
+
+    def reserve_block(start_date, end_date, number_of_rooms: 5)
       block_dates = Duration.new(start_date, end_date)
       block = Block.new(block_dates)
 

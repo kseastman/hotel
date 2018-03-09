@@ -28,8 +28,7 @@ module Hotel
       end
     end
 
-    def self.open_room
-    end
+
 
   end
 end
