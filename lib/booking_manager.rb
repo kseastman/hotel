@@ -16,6 +16,7 @@ module Hotel
       @reservations = []
       @occupied_rooms = []
       @block_reservations = []
+      @available_rooms = []
     end
 
     def load_rooms
@@ -31,11 +32,13 @@ module Hotel
       dates = Duration.new(start_date, end_date)
       date_range = dates.period
 
-      # Here for testing purposes, will find a better place or delete if unnecessary
-
-      open_room = rooms.find { |room| room.status == :AVAILABLE }
-      @reservations << Booking.new(open_room, date_range)
-
+      if @reservations.length == 0
+        open_room = rooms.first
+      else
+        available_rooms = all_available(date_range)
+        open_room = available_rooms.first
+      end
+       @reservations << Booking.new(open_room, date_range)
     end
 
     def get_bookings_by_date(date)
@@ -45,13 +48,29 @@ module Hotel
       return bookings
     end
 
-    def available_rooms(date)
-      date_range.each do |day|
-         get_availability_by_date(day)
+    # def available_rooms(date_range)
+    #   available = []
+    #    date_range.each do |day|
+    #       available << get_availability_by_date(day)
+    #   end
+    #   return available
+    # end
+    def all_available(date_range)
+      available_rooms = []
+      date_range.each do |date|
+        rooms_check = get_availability_by_date(date)
+
+        if available_rooms.length == 0
+          available_rooms = rooms_check
+        else
+          temp_rooms = available_rooms & rooms_check
+          available_rooms = temp_rooms
+        end
       end
-      binding.pry
-      return available
+
+      return available_rooms
     end
+
 
     def get_booking_by_id(id_to_find)
       find_booking = @reservations.find { |booking| booking.id == id_to_find}
@@ -82,10 +101,24 @@ module Hotel
 
 
     def reserve_block(start_date, end_date, number_of_rooms: 5)
-      block_dates = Duration.new(start_date, end_date)
-      block = Block.new(block_dates)
+      # binding.pry
+      # dates = Duration.new(start_date, end_date)
+      # block_dates = dates.period
+      # block = Block.new(block_dates, available_rooms)
+      #
+      # @block_reservations << block
 
-      @block_reservations << block
+      dates = Duration.new(start_date, end_date)
+      date_range = dates.period
+
+      if @block_reservations.length == 0
+        open_rooms = rooms.first(number_of_rooms)
+      else
+        available_rooms = all_available(date_range)
+        open_rooms = available_rooms.first(number_of_rooms)
+      end
+
+      @block_reservations << Block.new(date_range, open_rooms)
     end
 
     def check_out(room_number)
@@ -96,3 +129,4 @@ module Hotel
 
   end
 end
+# binding.pry

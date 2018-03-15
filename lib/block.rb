@@ -7,12 +7,27 @@ module Hotel
 
   class Block
     @@block_count = 0
-    def initialize(date_range)
+    def initialize(date_range, available_rooms)
       @id = @@block_count += 1
-      @rooms = [] #check availability?
+      @rooms = reserve_block(date_range, available_rooms)
       @period = date_range
     end
 
+    def set_block_price(price)
+      block_price = price
+      return block_price
+    end
+
+    def reserve_block(date_range, open_rooms, price: 150)
+      reserved = Hash[date_range.collect { |date| [date, :BLOCK]}]
+      rooms = []
+      open_rooms.each do |open_room|
+        open_room.block_dates = reserved
+        open_room.block_price(price)
+        rooms << open_room
+      end
+      return rooms
+    end
 
 
 

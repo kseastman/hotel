@@ -11,21 +11,32 @@ module Hotel
     attr_reader :cost_estimate, :room, :period, :id, :id_count
     def initialize(open_room, date_range)
       @id = @@id_count += 1
-      @room = open_room
+      @room = reserve_room(open_room, date_range)
       @period = date_range
-      @cost_estimate = get_cost_estimate(period)
-    end
-
-    def reserve_room(date_range)
-     # add dates to room
-     # set status for dates to available
-
+      @cost_estimate = get_cost_estimate(date_range)
     end
 
     def get_cost_estimate(period)
-      length = period.length
+      length = period.size
       subtotal = room.cost_per_night * length
       return subtotal
     end
+
+    def reserve_room(open_room, date_range)
+      reserved = Hash[date_range.collect { |date| [date, :RESERVED]}]
+      if open_room.reserved_dates == nil
+        open_room.reserved_dates = reserved
+        return open_room
+      else
+        date_range.each do |date|
+          if open_room.reserved_dates.has_key?(date)
+            raise StandardError.new("Room is not available for this day: #{date}")
+          end
+          open_room.reserved_dates.merge!(reserved)
+        end
+      end
+      return open_room
+    end
+
   end
 end

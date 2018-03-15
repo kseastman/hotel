@@ -109,9 +109,9 @@ describe "BookingManager" do
       end
 
 
-      it "has business logic" do
-        # add as many tests as you need to test the business logic
-      end
+      # it "has business logic" do
+      #   # add as many tests as you need to test the business logic
+      # end
 
     end
   end

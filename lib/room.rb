@@ -5,7 +5,7 @@ require 'simplecov'
 
 module Hotel
   class Room
-    attr_accessor :status
+    attr_accessor :status, :reserved_dates, :block_dates
     attr_reader :room_number, :cost_per_night
     def initialize(number)
 
@@ -14,8 +14,11 @@ module Hotel
       # proofing reasons, maybe overcomplicating things
       @room_number = number
       @cost_per_night = 200
+
+      # remove status as a discrete attribute, use block dates and reserved dates instead
       @status = :AVAILABLE
       @block_dates = nil
+      @reserved_dates = nil
 
     end
 
@@ -28,7 +31,9 @@ module Hotel
       end
     end
 
-
+    def block_price(price)
+      @cost_per_night = price
+    end
 
   end
 end
