@@ -59,40 +59,21 @@ describe "BookingManager" do
         end}.must_raise StandardError
       end
 
-      #Will likely be removed from final code
-
-      #---
-      # it "can set the availability of rooms each day" do
-      #   @result.set_availability
-      #   result = @result.occupied_rooms[0].room
-      #
-      #   result.status.must_equal :RESERVED
-      # end
-
       it "can get a list of available rooms by date" do
         result = @result.get_availability_by_date(@date)
         result.must_be_kind_of Array
         #---
 
         result = @result.get_availability_by_date(@date).first
+        result2 = result.reserved_dates.include?(@date)
 
         result.must_be_instance_of Hotel::Room
-        result.status.must_equal :AVAILABLE
+        result2.must_equal false
+
       end
     end
 
     describe "Date Handling" do
-
-      # it "can handle string dates" do #edge_case, too closely coupled
-      #   date = "#{Date.today + 2}"
-      #   expected_result = Date.today + 2
-      #   result = @result.get_bookings_by_date(date)
-      #
-      #   result.must_be_kind_of Array
-      #   result[0].must_be_instance_of Hotel::Booking
-      #   result[0].period.must_include expected_result
-      #
-      # end
 
       it "raises an error if an invalid date is used" do
         #this test doesn't seem to pass for the right reasons, investigate further
@@ -107,11 +88,6 @@ describe "BookingManager" do
         start_date = today << 1
         proc{ @result.reserve_room(start_date, today)}.must_raise StandardError
       end
-
-
-      # it "has business logic" do
-      #   # add as many tests as you need to test the business logic
-      # end
 
     end
   end
