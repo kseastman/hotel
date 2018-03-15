@@ -15,11 +15,6 @@ module Hotel
       @period = date_range
     end
 
-    def set_block_price(price)
-      block_price = price
-      return block_price
-    end
-
     def reserve_block(date_range, open_rooms, price: 150)
       reserved = Hash[date_range.collect { |date| [date, :BLOCK]}]
       rooms = []

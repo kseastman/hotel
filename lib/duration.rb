@@ -30,13 +30,6 @@ module Hotel
         parsed_date = Date.parse(date)
         date = parsed_date
       end
-      if date.class != Date
-        raise StandardError.new("Invalid reservation date entry: #{date}")
-      end
-      compare = date <=> Date.today.prev_day
-      if compare == -1
-        raise StandardError.new("Invalid reservation date entry: #{date} has already passed.")
-      end
       return date
     end
   end

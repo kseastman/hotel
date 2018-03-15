@@ -24,19 +24,7 @@ module Hotel
 
     def reserve_room(open_room, date_range)
       reserved = Hash[date_range.collect { |date| [date, :RESERVED]}]
-
-      if open_room.reserved_dates.length == 0
-        open_room.reserved_dates.merge!(reserved)
-      else
-        date_range.each do |date|
-          ##this belongs somewhere else, where open_rooms are being defined.
-          # if open_room.reserved_dates.has_key?(date)
-          #   raise StandardError.new("Room is not available for this day: #{date}")
-          # end
-          binding.pry
-          open_room.reserved_dates.merge!(reserved)
-        end
-      end
+      open_room.reserved_dates.merge!(reserved)
       return open_room
     end
 

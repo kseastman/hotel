@@ -8,7 +8,7 @@ end
 describe "Block#initialize" do
 it "creates a block with an id, rooms and a date_range" do
   # test that it creates a user
-  result = @block1.first
+  result = @block1
 
   result.must_be_instance_of Hotel::Block
 
@@ -18,11 +18,9 @@ it "creates a block with an id, rooms and a date_range" do
 end
 
 it "won't accept a block with rooms from another block" do
-  # proc{
-  #   @booking_manager.reserve_block("apr4, 2018", "apr7, 2018")
-  # }.must_raise StandardError
-  result = @booking_manager.reserve_block("apr4, 2018", "apr7, 2018")
-  result.must_be_nil
+  proc{
+    @booking_manager.reserve_block("apr4, 2018", "apr7, 2018")
+  }.must_raise StandardError
 end
 
 

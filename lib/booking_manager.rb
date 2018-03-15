@@ -46,14 +46,11 @@ module Hotel
       dates = Duration.new(start_date, end_date)
       date_range = dates.period
 
-      if @block_reservations.length == 0
-        open_rooms = rooms.first(number_of_rooms)
-      else
-        available_rooms = all_available(date_range)
-        open_rooms = available_rooms.first(number_of_rooms)
-      end
+      open_rooms = rooms.take(number_of_rooms)
+      block = Block.new(date_range, open_rooms)
 
-      @block_reservations << Block.new(date_range, open_rooms)
+      @block_reservations << block
+      return block
     end
 
 
