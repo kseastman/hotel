@@ -16,7 +16,7 @@ module Hotel
       @reservations = []
       @occupied_rooms = []
       @block_reservations = []
-      @available_rooms = []
+      @available_rooms = nil
     end
 
     def load_rooms
@@ -38,24 +38,27 @@ module Hotel
         available_rooms = all_available(date_range)
         open_room = available_rooms.first
       end
+
        @reservations << Booking.new(open_room, date_range)
     end
 
-    def get_bookings_by_date(date)
-      bookings = @reservations.find_all do |booking|
-        booking.period.include? date
+    def reserve_block(start_date, end_date, number_of_rooms: 5)
+      dates = Duration.new(start_date, end_date)
+      date_range = dates.period
+
+      if @block_reservations.length == 0
+        open_rooms = rooms.first(number_of_rooms)
+      else
+        available_rooms = all_available(date_range)
+        open_rooms = available_rooms.first(number_of_rooms)
       end
-      return bookings
+
+      @block_reservations << Block.new(date_range, open_rooms)
     end
 
-    # def available_rooms(date_range)
-    #   available = []
-    #    date_range.each do |day|
-    #       available << get_availability_by_date(day)
-    #   end
-    #   return available
-    # end
-    def all_available(date_range)
+
+
+    def all_available(date_range) #actively using this
       available_rooms = []
       date_range.each do |date|
         rooms_check = get_availability_by_date(date)
@@ -71,6 +74,18 @@ module Hotel
       return available_rooms
     end
 
+    def get_bookings_by_date(date)
+      bookings = @reservations.find_all do |booking|
+        if booking.period.include? date
+          @occupied_rooms << booking
+        end
+      end
+      @available_rooms = @rooms - @occupied_rooms
+      if @available_rooms.length == 0
+        raise StandardError.new("Room is not available for this day: #{date}")
+      end
+      return bookings
+    end
 
     def get_booking_by_id(id_to_find)
       find_booking = @reservations.find { |booking| booking.id == id_to_find}
@@ -78,55 +93,19 @@ module Hotel
     end
 
     def get_availability_by_date(date)
-      unavailable_rooms = []
-      find_bookings = get_bookings_by_date(date)
+      get_bookings_by_date(date)
+      potential_rooms = @available_rooms
+      open_rooms = []
+      potential_rooms.each do |room|
 
-      find_bookings.each do |booking|
-        unavailable_rooms << booking.room
+        unless room.reserved_dates.has_key?(date) || room.block_dates.has_key?(date)
+          open_rooms << room
+
+        end
       end
+      return open_rooms
 
-      available_rooms = @rooms - unavailable_rooms
-      return available_rooms
     end
-
-    # def set_availability
-    #   #unneccesary function, may reuse some logic elsewhere
-    #   today = Date.today
-    #   @occupied_rooms = get_bookings_by_date(today)
-    #   @occupied_rooms.each do |booking|
-    #     booking.room.change_status
-    #   end
-    # end
-
-
-
-    def reserve_block(start_date, end_date, number_of_rooms: 5)
-      # binding.pry
-      # dates = Duration.new(start_date, end_date)
-      # block_dates = dates.period
-      # block = Block.new(block_dates, available_rooms)
-      #
-      # @block_reservations << block
-
-      dates = Duration.new(start_date, end_date)
-      date_range = dates.period
-
-      if @block_reservations.length == 0
-        open_rooms = rooms.first(number_of_rooms)
-      else
-        available_rooms = all_available(date_range)
-        open_rooms = available_rooms.first(number_of_rooms)
-      end
-
-      @block_reservations << Block.new(date_range, open_rooms)
-    end
-
-    def check_out(room_number)
-      find_room = @rooms.find { |room| room.room_number == room_number}
-      find_room.change_status(:AVAILABLE)
-    end
-
 
   end
 end
-# binding.pry

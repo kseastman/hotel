@@ -17,8 +17,8 @@ module Hotel
 
       # remove status as a discrete attribute, use block dates and reserved dates instead
       # @status = :AVAILABLE
-      @block_dates = nil
-      @reserved_dates = nil
+      @block_dates = {}
+      @reserved_dates = {}
 
     end
 
@@ -33,6 +33,22 @@ module Hotel
 
     def block_price(price)
       @cost_per_night = price
+    end
+
+    def check_block_dates(date_range)
+      date_range.each do |date|
+        if @block_dates.has_key?(date)
+          raise StandardError.new("Room is reserved to a block on #{date}")
+        end
+      end
+    end
+
+    def check_reserved_dates(date_range)
+      date_range.each do |date|
+        if @reserved_dates.has_key?(date)
+          raise StandardError.new("Room is already reserved on #{date}")
+        end
+      end
     end
 
   end
