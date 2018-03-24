@@ -90,5 +90,46 @@ describe "BookingManager" do
       end
 
     end
+
+
+  end
+end
+
+describe "Instructor Suggested Test Cases" do
+  describe "Instructor Test Cases (without before block)" do
+    it "handles no reservations" do
+
+    end
+  end
+
+  describe "Instructor Test Cases (with before block)" do
+
+    it "allows reservations that do not overlap on dates" do
+
+    end
+
+    it "handles dates that overlap in the front" do
+
+    end
+
+    it "handles dates that overlap in the back" do
+
+    end
+
+    it "handles dates that completely contain others" do
+
+    end
+
+    it "handles dates completely contained by others" do
+
+    end
+
+    it "allows dates that end on the checkin date" do
+
+    end
+
+    it "allows reservations that start on the checkout date" do
+      op
+    end
   end
 end

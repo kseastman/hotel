@@ -36,7 +36,7 @@ module Hotel
         open_room = rooms.first
       else
         available_rooms = all_available(date_range)
-        open_room = available_rooms.first
+        open_room = available_rooms.pop
       end
 
        @reservations << Booking.new(open_room, date_range)
