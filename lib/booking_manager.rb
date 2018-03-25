@@ -95,17 +95,15 @@ module Hotel
 
     def get_availability_by_date(date)
       get_bookings_by_date(date)
-      potential_rooms = @available_rooms
       open_rooms = []
-      potential_rooms.each do |room|
 
-        unless room.reserved_dates.has_key?(date) || room.block_dates.has_key?(date)
+      @available_rooms.each do |room|
+        unless room.free?(date)
           open_rooms << room
-
         end
       end
-      return open_rooms
 
+      return open_rooms
     end
 
   end

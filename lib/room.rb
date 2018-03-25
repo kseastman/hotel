@@ -12,7 +12,7 @@ module Hotel
       # rooms that know their room number and cost
       # make more sense as objects than a hash, for future
       # proofing reasons, maybe overcomplicating things
-      
+
       @room_number = number
       @cost_per_night = 200
       @block_dates = {}
@@ -38,6 +38,13 @@ module Hotel
           raise StandardError.new("Room is already reserved on #{date}")
         end
       end
+    end
+
+    def free?(date)
+      if @block_dates.has_key?(date) || @reserved_dates.has_key?(date)
+        return true
+      end
+      return false
     end
 
   end
