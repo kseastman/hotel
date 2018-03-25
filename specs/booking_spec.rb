@@ -37,6 +37,14 @@ describe "Booking" do
           end
         }.must_raise StandardError
       end
+
+      it "won't accept a reservation for a room that is reserved" do
+        proc{
+          30.times do
+            @booking_manager.reserve_room("apr4, 2018", "apr7, 2018")
+          end
+        }.must_raise StandardError
+      end
     end
   end
 

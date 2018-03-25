@@ -68,6 +68,10 @@ module Hotel
         end
       end
 
+      available_rooms.each do |room|
+        room.check_reserved_dates(date_range)
+      end
+
       return available_rooms
     end
 

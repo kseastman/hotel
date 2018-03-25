@@ -98,38 +98,124 @@ end
 describe "Instructor Suggested Test Cases" do
   describe "Instructor Test Cases (without before block)" do
     it "handles no reservations" do
+      bookingmanager1 = Hotel::BookingManager.new
 
+      result = bookingmanager1.reservations
+
+      result.must_be_kind_of Array
+      result.length.must_equal 0
     end
   end
 
   describe "Instructor Test Cases (with before block)" do
+    before do
+      @date1 = Date.today
+      @date2 = @date1 + 3
+
+      @result = Hotel::BookingManager.new
+    end
 
     it "allows reservations that do not overlap on dates" do
+      20.times do
+        booking1 = @result.set_booking(@date1.to_s, @date2.to_s)
+      end
 
+      20.times do
+        booking2 = @result.set_booking((@date2 + 3).to_s, (@date2 + 7).to_s)
+      end
+
+      result = @result.reservations
+
+      result.length.must_equal 40
+      result.first.must_be_kind_of Hotel::Booking
+      result.last.must_be_kind_of Hotel::Booking
     end
 
     it "handles dates that overlap in the front" do
+      20.times do
+        booking1 = @result.set_booking(@date1.to_s, @date2.to_s)
+      end
+
+      proc {
+        20.times do
+          booking2 = @result.set_booking((@date1 - 1).to_s, (@date2 - 1).to_s)
+        end
+      }.must_raise StandardError
+
+      result = @result.reservations
+
+      result.length.must_equal 20
+      result.first.must_be_kind_of Hotel::Booking
+      result.last.must_be_kind_of Hotel::Booking
 
     end
 
     it "handles dates that overlap in the back" do
+      20.times do
+        booking1 = @result.set_booking(@date1.to_s, @date2.to_s)
+      end
 
+      proc {
+        20.times do
+          booking2 = @result.set_booking((@date2 - 2).to_s, (@date2 + 4).to_s)
+        end
+      }.must_raise StandardError
+
+      result = @result.reservations
+
+      result.length.must_equal 20
+      result.first.must_be_kind_of Hotel::Booking
+      result.last.must_be_kind_of Hotel::Booking
     end
 
     it "handles dates that completely contain others" do
+      20.times do
+        booking1 = @result.set_booking(@date1.to_s, @date2.to_s)
+      end
 
-    end
+      proc {
+        20.times do
+          booking2 = @result.set_booking((@date1 + 1).to_s, (@date2 - 1).to_s)
+        end
+      }.must_raise StandardError
 
-    it "handles dates completely contained by others" do
+      result = @result.reservations
 
+      result.length.must_equal 20
+      result.first.must_be_kind_of Hotel::Booking
+      result.last.must_be_kind_of Hotel::Booking
     end
 
     it "allows dates that end on the checkin date" do
+      20.times do
+        booking1 = @result.set_booking(@date1.to_s, @date2.to_s)
+      end
 
+      20.times do
+        booking2 = @result.set_booking((@date1 - 3).to_s, @date1.to_s)
+      end
+
+      result = @result.reservations
+
+      result.length.must_equal 40
+      result.first.must_be_kind_of Hotel::Booking
+      result.last.must_be_kind_of Hotel::Booking
     end
 
     it "allows reservations that start on the checkout date" do
-      op
+      20.times do
+        booking1 = @result.set_booking(@date1.to_s, @date2.to_s)
+      end
+
+      20.times do
+        booking2 = @result.set_booking(@date2.to_s, (@date2 + 2).to_s)
+      end
+
+      result = @result.reservations
+
+      result.length.must_equal 40
+      result.first.must_be_kind_of Hotel::Booking
+      result.last.must_be_kind_of Hotel::Booking
     end
   end
 end
