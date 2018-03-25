@@ -82,9 +82,7 @@ module Hotel
         end
       end
       @available_rooms = @rooms - @occupied_rooms
-      if @available_rooms.length == 0
-        raise StandardError.new("Room is not available for this day: #{date}")
-      end
+
       return bookings
     end
 
